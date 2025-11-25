@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Barcode Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .box { padding: 15px; border: 1px solid #ccc; margin-top: 20px; border-radius: 8px; }
+    .label { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>📦 Product Barcode Scanner</h2>
+
+<div id="reader" style="width:300px;"></div>
+
+<div id="result" class="box" style="display:none;">
+  <p><span class="label">Product:</span> <span id="pname"></span></p>
+  <p><span class="label">MFG Date:</span> <span id="pmfg"></span></p>
+  <p><span class="label">EXP Date:</span> <span id="pexp"></span></p>
+  <p><span class="label">Price:</span> ₹<span id="pprice"></span></p>
+</div>
+
+<script>
+// Database that matches your printed barcodes
+const db = [
+  { barcode: "89010010000011", product: "Lays Classic Salted 50g", mfg: "2025-11-01", exp: "2026-02-01", price: 20 },
+  { barcode: "89010010000028", product: "Dairy Milk 20g", mfg: "2025-10-12", exp: "2026-04-12", price: 10 },
+  { barcode: "89010010000035", product: "Parle-G 100g", mfg: "2025-11-10", exp: "2026-05-10", price: 15 },
+  { barcode: "89010010000042", product: "Red Bull 250ml", mfg: "2025-11-05", exp: "2026-05-05", price: 115 },
+  { barcode: "89010010000059", product: "Pepsi 500ml", mfg: "2025-11-08", exp: "2026-03-08", price: 40 },
+  { barcode: "89010010000066", product: "Britannia Bread", mfg: "2025-11-22", exp: "2025-11-29", price: 30 },
+  { barcode: "89010010000073", product: "Nestle Milk 1L", mfg: "2025-11-01", exp: "2025-12-01", price: 70 },
+  { barcode: "89010010000080", product: "Amul Butter 100g", mfg: "2025-10-15", exp: "2026-01-15", price: 55 },
+  { barcode: "89010010000097", product: "Maggie Noodles 70g", mfg: "2025-09-20", exp: "2026-03-20", price: 14 },
+  { barcode: "89010010000103", product: "Coke Zero 300ml", mfg: "2025-11-12", exp: "2026-04-12", price: 35 }
+];
+
+function onScanSuccess(scannedCode) {
+  let item = db.find(p => p.barcode === scannedCode);
+
+  if (item) {
+    document.getElementById("result").style.display = "block";
+    document.getElementById("pname").innerText = item.product;
+    document.getElementById("pmfg").innerText = item.mfg;
+    document.getElementById("pexp").innerText = item.exp;
+    document.getElementById("pprice").innerText = item.price;
+  } else {
+    alert("Item not found in database");
+  }
+}
+
+let html5QrcodeScanner = new Html5QrcodeScanner(
+  "reader", { fps: 10, qrbox: 250 }
+);
+html5QrcodeScanner.render(onScanSuccess);
+</script>
+
+</body>
+</html>
