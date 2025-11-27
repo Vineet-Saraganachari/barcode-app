@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details</title>
+
+<style>
+  body {
+    background: #eef7ff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  .card {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0px 0px 15px #ccc;
+    font-size: 28px;
+  }
+
+  .fresh {
+    margin-top: 25px;
+    padding: 20px;
+    background: #00aa66;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 30px;
+  }
+
+  button {
+    width: 100%;
+    padding: 20px;
+    margin-top: 30px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 28px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card" id="infoBox">Loading...</div>
+
+<button onclick="goBack()">Scan Another</button>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
+
+const db = {
+  "8902080364589": {
+    name: "Mountain Dew 400ml",
+    mfg: "2025-11-05",
+    exp: "2026-05-05",
+    price: "₹115",
+    fresh: "VERY FRESH"
+  },
+  "8901001000028": {
+    name: "Lays Classic Salted",
+    mfg: "2024-10-10",
+    exp: "2025-04-10",
+    price: "₹20",
+    fresh: "FRESH"
+  },
+  "8906092499970":{
+    name: "Kadhi SANDALWOOD SOAP",
+    mfg:"2024-10-10",
+    exp:"2027-15-9",
+    price: "₹270",
+    fresh:"VERY FRESH"
+  },
+  "8901058005233":{
+    name: "Kitkat",
+    mfg:"2025-08-10 ",
+    exp:"2026-04-26 ",
+    price: "₹10",
+    fresh:"FRESH "
+  },
+};
+
+if (db[code]) {
+  let p = db[code];
+
+  document.getElementById("infoBox").innerHTML = `
+    <b>Product:</b> ${p.name}<br><br>
+    <b>MFG:</b> ${p.mfg}<br><br>
+    <b>EXP:</b> ${p.exp}<br><br>
+    <b>Price:</b> ${p.price}<br><br>
+    <div class="fresh">${p.fresh}</div>
+  `;
+} else {
+  document.getElementById("infoBox").innerHTML = `
+    Product Not Found<br><br>
+    Code: ${code}
+  `;
+}
+
+function goBack() {
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

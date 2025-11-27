@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Product Scanner</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+  body {
+    margin: 0;
+    background: #f5f5f5;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 34px;
+    margin-top: 40px;
+    color: #003366;
+  }
+
+  .box {
+    margin-top: 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 25px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 15px #ccc;
+    font-size: 20px;
+  }
+
+  button {
+    margin-top: 25px;
+    padding: 20px;
+    width: 80%;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 26px;
+  }
+
+  #reader {
+    margin-top: 30px;
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #closeBtn {
+    background: red;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>📦 Smart Product Scanner</h1>
+
+<div class="box" id="permissionBox">
+  <p>This app needs access to your camera to scan product barcodes.</p>
+  <button onclick="requestCamera()">Allow Camera</button>
+</div>
+
+<div id="scannerBox" style="display:none;">
+  <h2 style="font-size:30px;">Scan the Barcode</h2>
+  <div id="reader"></div>
+  <button id="closeBtn" onclick="stopScanner()">Stop Scanning</button>
+</div>
+
+<script>
+let scanner;
+
+// Step 1 — Ask for permission
+function requestCamera() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(() => {
+      document.getElementById("permissionBox").style.display = "none";
+      startScanner();
+    })
+    .catch(() => {
+      alert("Camera permission denied. Please enable it in settings.");
+    });
+}
+
+// Step 2 — Start scanner
+function startScanner() {
+  document.getElementById("scannerBox").style.display = "block";
+
+  scanner = new Html5Qrcode("reader");
+
+  scanner.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: { width: 300, height: 200 }
+    },
+    (decodedText) => {
+      scanner.stop();
+      window.location.href = "product.html?code=" + decodedText;
+    },
+    (err) => {}
+  );
+}
+
+function stopScanner() {
+  scanner.stop();
+  alert("Scanner stopped.");
+}
+</script>
+
+</body>
+</html>
